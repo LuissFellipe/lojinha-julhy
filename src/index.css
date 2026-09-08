@@ -1,0 +1,112 @@
+@import 'tailwindcss';
+
+@theme {
+  /* ---- Paleta BELLIS (tirada da identidade do @vistabellis) ---- */
+  --color-areia: #e9d2b4; /* bege do perfil */
+  --color-areia-claro: #f3e5d2;
+  --color-creme: #faf5ec; /* branco das pétalas */
+  --color-ouro: #d99a0b; /* miolo da margarida / logotipo */
+  --color-ouro-claro: #edb93a;
+  --color-terra: #4a3520; /* marrom das fotos */
+  --color-terra-escuro: #2c1e12;
+  --color-rosa: #e6a6ae; /* acento do vestido rosa do feed */
+
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Jost', ui-sans-serif, system-ui, sans-serif;
+
+  --ease-bellis: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-creme);
+    color: var(--color-terra-escuro);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--color-ouro);
+    color: var(--color-creme);
+  }
+
+  /* Scrollbar discreta no tom da marca */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-areia-claro);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-ouro);
+    border-radius: 99px;
+    border: 3px solid var(--color-areia-claro);
+  }
+}
+
+@layer utilities {
+  /* Textura de papel — dá "peso" ao bege e evita o look de template */
+  .grao::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  }
+
+  .texto-fino {
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    font-weight: 400;
+  }
+
+  .borda-suave {
+    border-radius: 999px 999px 12px 12px;
+  }
+}
+
+/* Indicador de scroll do hero */
+@keyframes descer {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(340%);
+  }
+}
+
+/* Estados iniciais das animações — evitam o "flash" antes do GSAP assumir */
+.gsap-oculto {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .gsap-oculto {
+    opacity: 1 !important;
+  }
+  /* Sem animação a cortina de abertura nunca sobe — sem isto ela
+     fica cobrindo a página inteira de bege. */
+  [data-cortina] {
+    display: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

@@ -1,0 +1,15 @@
+services:
+  site:
+    build: .
+    container_name: bellis-dev
+    ports:
+      - '5173:5173'
+    volumes:
+      # O código vem da máquina (hot reload funciona ao editar os arquivos).
+      - .:/app
+      # ...menos node_modules, que fica só dentro do container.
+      - /app/node_modules
+    environment:
+      # Bind mount em HDD externo não emite eventos de inode confiáveis;
+      # o polling garante que o Vite enxergue as edições.
+      - CHOKIDAR_USEPOLLING=true
