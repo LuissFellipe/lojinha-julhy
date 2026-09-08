@@ -21,7 +21,7 @@ export const CATEGORIAS = [
   'Tricô',
 ]
 
-export const PRODUTOS = [
+const CATALOGO = [
   {
     id: 1,
     nome: 'Polo Lisa',
@@ -290,3 +290,14 @@ export const PRODUTOS = [
     ],
   },
 ]
+
+// No GitHub Pages o site mora em /lojinha-julhy/, não na raiz do domínio.
+// O Vite corrige caminhos no HTML e no CSS, mas não dentro de strings do JS —
+// então a base entra aqui. Em desenvolvimento BASE_URL é '/' e nada muda.
+export const PRODUTOS = CATALOGO.map((produto) => ({
+  ...produto,
+  fotos: produto.fotos.map((foto) => ({
+    ...foto,
+    src: import.meta.env.BASE_URL + foto.src.replace(/^\//, ''),
+  })),
+}))
